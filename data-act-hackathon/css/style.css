@@ -42,16 +42,12 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     display: block;
     width: 100%;
-		-webkit-filter: grayscale(1);
-  	filter: grayscale(1);
 		transition: all 1s ease;
 }
 
 .intro-effect-side.modify .bg-img img {
 		width: 80%;
 		left: 25%;
-		-webkit-filter: grayscale(0);
-	  filter: grayscale(0);
 		transition: all 1s ease;
 }
 
@@ -662,14 +658,6 @@ button.trigger span::before {
     right: -80px;
     bottom: -80px;
     left: -80px;
-		background: rgba(12,83,88,1);
-		background: -moz-linear-gradient(top, rgba(12,83,88,1) 0%, rgba(205,220,43,0.5) 100%);
-		background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(12,83,88,1)), color-stop(100%, rgba(205,220,43,0.5)));
-		background: -webkit-linear-gradient(top, rgba(12,83,88,1) 0%, rgba(205,220,43,0.5) 100%);
-		background: -o-linear-gradient(top, rgba(12,83,88,1) 0%, rgba(205,220,43,0.5) 100%);
-		background: -ms-linear-gradient(top, rgba(12,83,88,1) 0%, rgba(205,220,43,0.5) 100%);
-		background: linear-gradient(to bottom, rgba(12,83,88,1) 0%, rgba(205,220,43,0.5) 100%);
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0c5358', endColorstr='#cddc2b', GradientType=0 );
 }
 
 .intro-effect-side.modify .bg-img::after {
