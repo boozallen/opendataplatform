@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Getting Started with Open Data Platform</title>
+		<meta name="description" content="Getting Started for the Data Act Hackathon" />
+		<meta name="keywords" content="Open Data Platform, hackathon, data.gov">
+		<meta name="author" content="Codrops" />
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
+		<link href="https://fonts.googleapis.com/css?family=Oswald:300,500,700" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Cardo:400,400i" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/normalize.css">
+		<link rel="stylesheet" type="text/css" href="css/demo.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<!--[if IE]>
+  		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
+	<body class="demo-4">
+		<div id="container" class="container intro-effect-side">
+			<!-- Top Navigation -->
+			<div class="codrops-top clearfix">
+				<a class="#">DATA ACT HACKATHON</a>
+				<span class="right"><a href="#"><span>APRIL 27-28, 2017</span></a></span>
+			</div>
+			<header class="header">
+				<div class="bg-img"><img src="img/holly-mandarich-232348.jpg" alt="Background Image" /></div>
+				<div class="title">
+						<!-- <h4 class="year">2017</h4>
+						<h1>Data Act Hackathon</h1>
+						<h4 class="date">April 27-28</h4> -->
+
+						<div class="logo-bah"></div>
+						<div class="logo-odp"></div>
+						<h3>Getting Started</h3>
+						<p class="subline">Setup & Configuration</p>
+						<!-- <p>
+							<strong>—</strong>
+						</p>
+						<p><strong>Welcome to the 2017 Data Act Hackathon!</strong></p> -->
+						<hr />
+						<p class="github">
+							<img src="img/icon-github.png" class="icon-github" />
+							<span class="github-text">
+							Download the latest codebase at...<br />
+							<a href="https://github.com/boozallen/opendataplatform" target="blank_"><strong>github.com/boozallen/opendataplatform</strong></a>
+							</span>
+						</p>
+
+				</div>
+			</header>
+			<button class="trigger" data-info=""><span>Trigger</span></button>
+			<article class="content">
+				<div>
+					<p>The Open Data Platform (ODP) is designed to aid in rapidly setting up a Hadoop environment and facilitate the ingestion of data to allow data analysis and visualization.</p>
+					<h3>Data</h3>
+					<p style="margin-bottom: 0;">
+						The DATA Act Hackathon is aimed at leveraging data available from the following resources:
+					</p>
+					<ul style="margin-top: 5px;">
+						<li>
+							<a href="https://spending-api.us" target="blank_">https://spending-api.us</a>
+						</li>
+						<li>
+							<a href="https://www.usaspending.gov" target="blank_">https://www.usaspending.gov</a>
+						</li>
+						<li>
+							<a href="https://www.data.gov/" target="blank_">https://www.data.gov/</a>
+						</li>
+					</ul>
+
+					<h3>Hadoop Cluster</h3>
+					<p>[Insert information about Hadoop cluster status page and the overall infrastructure being installed by Ambari]</p>
+
+					<h3>Ingestion</h3>
+					<p>The ODP project for data ingestion utilizes Apache NiFi.  There are some example templates that demonstrate the ability of the platform to process incoming data as a REST API from spending-api.us or from CSV files.  The example use case seeks to utilize geocoder to extract latitude/longitude coordinates based off zipcodes and transform the data into JSON to be indexed into ElasticSearch and then use Kibana as a visualization into that data.</p>
+					<p>
+						The NiFi Templates are just guidelines and there are many default processors that come packaged with Nifi that allow the user to route and transform data into the system.
+					</p>
+					<p>
+						The github project is located:<br />
+						<a href="https://github.boozallencsn.com/odp/odp-data-nifi" target="blank_">https://github.boozallencsn.com/odp/odp-data-nifi</a>
+					</p>
+					<h3>DATA Act Hackathon Example REST API Template</h3>
+					<p>Access the NiFi instance that has been provisioned: <a href="http://{server}:8080/nifi/" target="blank_">http://{server}:8080/nifi/</a></p>
+					<p>
+						This exposes an empty NiFi canvas where you can use the component toolbar to drag existing templates onto.
+					</p>
+					<img src="img/screenshot1.png" class="screenshot" />
+
+					<p>
+						The template entitled <strong>Hackathon_Pull_Data_Webservice_GeoLocate_Elastic</strong> will pull in the following template:
+					</p>
+
+					<img src="img/screenshot2.png" class="screenshot" />
+
+					<p>
+						You can select individual components and start/stop them or right-click them to update their configuration or inspect data flowing through the Dataflow. This template will pull data from an API endpoint and page through the data. It will attempt to enhance the data by adding a geolocation based on zipcode and then ingest the data into ElasticSearch.
+					</p>
+
+					<p>
+						To trigger the webservice stop/start the TriggerWebservice processor. This template is designed to hit the endpoints for "awards" and "transactions."
+					</p>
+
+					<img src="img/screenshot3.png" class="screenshot" />
+
+					<p>
+						ElasticSearch can be accessed via the endpoint:<br />
+						<a href="http://{server}:9200/" target="blank_">http://{server}:9200/</a>
+					</p>
+
+					<p>
+						Kibana can be accessed via the endpoint:<br />
+						<a href="http://{server}:5601/" target="blank_">http://{server}:5601/</a>
+					</p>
+
+					<p>
+						Before ingesting/re-ingesting you can update the ElasticSearch mappings for your collection.  Provided in the initial setup is a script that sets geo_points to aid in the kibana visualization. It is in the odp-nifi/scripts/setup_mappings_es.sh.
+					</p>
+
+					<img src="img/screenshot4.png" class="screenshot" />
+
+					<p>
+						Connecting to kibana you can add visualizations on ingested fields via the visualizations and dashboard tab. Below is a simple example displaying the top 10 awarded agencies and their locations:
+					</p>
+
+					<img src="img/screenshot5.png" class="screenshot" />
+
+					<h3>Zeppelin</h3>
+					<p>Apache Zeppelin is another tool that allows data analytics and visualizations provided.</p>
+
+					<h3>Flexibility</h3>
+					<p>The templates shown here can be customized and other processors to feed data into any number of other solutions such as HDFS, HBase, Hive, Solr, etc. It is up to the user to determine the best way they want to load and analyze the data.</p>
+
+				</div>
+			</article>
+
+		</div><!-- /container -->
+		<script src="js/classie.js"></script>
+		<script>
+			(function() {
+
+				// detect if IE : from http://stackoverflow.com/a/16657946
+				var ie = (function(){
+					var undef,rv = -1; // Return value assumes failure.
+					var ua = window.navigator.userAgent;
+					var msie = ua.indexOf('MSIE ');
+					var trident = ua.indexOf('Trident/');
+
+					if (msie > 0) {
+						// IE 10 or older => return version number
+						rv = parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+					} else if (trident > 0) {
+						// IE 11 (or newer) => return version number
+						var rvNum = ua.indexOf('rv:');
+						rv = parseInt(ua.substring(rvNum + 3, ua.indexOf('.', rvNum)), 10);
+					}
+
+					return ((rv > -1) ? rv : undef);
+				}());
+
+
+				// disable/enable scroll (mousewheel and keys) from http://stackoverflow.com/a/4770179
+				// left: 37, up: 38, right: 39, down: 40,
+				// spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+				var keys = [32, 37, 38, 39, 40], wheelIter = 0;
+
+				function preventDefault(e) {
+					e = e || window.event;
+					if (e.preventDefault)
+					e.preventDefault();
+					e.returnValue = false;
+				}
+
+				function keydown(e) {
+					for (var i = keys.length; i--;) {
+						if (e.keyCode === keys[i]) {
+							preventDefault(e);
+							return;
+						}
+					}
+				}
+
+				function touchmove(e) {
+					preventDefault(e);
+				}
+
+				function wheel(e) {
+					// for IE
+					//if( ie ) {
+						//preventDefault(e);
+					//}
+				}
+
+				function disable_scroll() {
+					window.onmousewheel = document.onmousewheel = wheel;
+					document.onkeydown = keydown;
+					document.body.ontouchmove = touchmove;
+				}
+
+				function enable_scroll() {
+					window.onmousewheel = document.onmousewheel = document.onkeydown = document.body.ontouchmove = null;
+				}
+
+				var docElem = window.document.documentElement,
+					scrollVal,
+					isRevealed,
+					noscroll,
+					isAnimating,
+					container = document.getElementById( 'container' ),
+					trigger = container.querySelector( 'button.trigger' );
+
+				function scrollY() {
+					return window.pageYOffset || docElem.scrollTop;
+				}
+
+				function scrollPage() {
+					scrollVal = scrollY();
+
+					if( noscroll && !ie ) {
+						if( scrollVal < 0 ) return false;
+						// keep it that way
+						window.scrollTo( 0, 0 );
+					}
+
+					if( classie.has( container, 'notrans' ) ) {
+						classie.remove( container, 'notrans' );
+						return false;
+					}
+
+					if( isAnimating ) {
+						return false;
+					}
+
+					if( scrollVal <= 0 && isRevealed ) {
+						toggle(0);
+					}
+					else if( scrollVal > 0 && !isRevealed ){
+						toggle(1);
+					}
+				}
+
+				function toggle( reveal ) {
+					isAnimating = true;
+
+					if( reveal ) {
+						classie.add( container, 'modify' );
+					}
+					else {
+						noscroll = true;
+						disable_scroll();
+						classie.remove( container, 'modify' );
+					}
+
+					// simulating the end of the transition:
+					setTimeout( function() {
+						isRevealed = !isRevealed;
+						isAnimating = false;
+						if( reveal ) {
+							noscroll = false;
+							enable_scroll();
+						}
+					}, 600 );
+				}
+
+				// refreshing the page...
+				var pageScroll = scrollY();
+				noscroll = pageScroll === 0;
+
+				disable_scroll();
+
+				if( pageScroll ) {
+					isRevealed = true;
+					classie.add( container, 'notrans' );
+					classie.add( container, 'modify' );
+				}
+
+				window.addEventListener( 'scroll', scrollPage );
+				trigger.addEventListener( 'click', function() { toggle( 'reveal' ); } );
+			})();
+		</script>
+	</body>
+</html>
