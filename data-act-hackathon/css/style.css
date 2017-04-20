@@ -107,14 +107,12 @@ button.trigger {
 }
 
 .container:not(.notrans) button.trigger {
-    -webkit-transition: opacity 0.3s 0.5s;
     transition: opacity 0.3s 0.5s;
 }
 
 .container.modify:not(.notrans) button.trigger {
     opacity: 0;
     pointer-events: none;
-    -webkit-transition-delay: 0s;
     transition-delay: 0s;
 }
 
@@ -220,44 +218,39 @@ button.trigger span::before {
 /* -------------------------- */
 
 .intro-effect-jam3:not(.notrans) .bg-img {
-    -webkit-transition-property: top, left, right, bottom;
     transition-property: top, left, right, bottom;
 }
 
 .intro-effect-jam3:not(.notrans) .header h1, .intro-effect-jam3:not(.notrans) .codrops-top a {
-    -webkit-transition-property: color;
     transition-property: color;
 }
 
 .intro-effect-jam3:not(.notrans) .codrops-demos a {
-    -webkit-transition-property: border-color, color;
     transition-property: border-color, color;
 }
 
 .intro-effect-jam3:not(.notrans) .header p {
-    -webkit-transition-property: color, opacity, -webkit-transform;
+    transition-property: color, opacity, -webkit-transform;
     transition-property: color, opacity, transform;
+    transition-property: color, opacity, transform, -webkit-transform;
 }
 
 .intro-effect-jam3:not(.notrans) .content>div {
-    -webkit-transition-property: opacity, -webkit-transform;
+    transition-property: opacity, -webkit-transform;
     transition-property: opacity, transform;
+    transition-property: opacity, transform, -webkit-transform;
 }
 
 .intro-effect-jam3:not(.notrans) .bg-img, .intro-effect-jam3:not(.notrans) .header h1, .intro-effect-jam3:not(.notrans) .codrops-top a, .intro-effect-jam3:not(.notrans) .codrops-demos a, .intro-effect-jam3:not(.notrans) .content>div {
-    -webkit-transition-duration: 0.5s;
     transition-duration: 0.5s;
-    -webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
     transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
 }
 
 .intro-effect-jam3:not(.notrans) .header p, .intro-effect-jam3:not(.notrans) .header p.subline, .intro-effect-jam3:not(.notrans) .content>div {
-    -webkit-transition-duration: 0.2s;
     transition-duration: 0.2s;
 }
 
 .intro-effect-jam3.modify:not(.notrans) .header p, .intro-effect-jam3.modify:not(.notrans) .header p.subline, .intro-effect-jam3.modify:not(.notrans) .content>div {
-    -webkit-transition-duration: 0.5s;
     transition-duration: 0.5s;
 }
 
@@ -341,17 +334,14 @@ button.trigger span::before {
 /* Delays */
 
 .intro-effect-jam3.modify:not(.notrans) .header p:nth-last-child(2) {
-    -webkit-transition-delay: 0.1s;
     transition-delay: 0.1s;
 }
 
 .intro-effect-jam3.modify:not(.notrans) .header p:last-child {
-    -webkit-transition-delay: 0.15s;
     transition-delay: 0.15s;
 }
 
 .intro-effect-jam3.modify:not(.notrans) .content>div {
-    -webkit-transition-delay: 0.2s;
     transition-delay: 0.2s;
 }
 
@@ -365,27 +355,26 @@ button.trigger span::before {
 /* -------------------------- */
 
 .intro-effect-fadeout:not(.notrans) .bg-img {
-    -webkit-transition-property: -webkit-transform;
+    transition-property: -webkit-transform;
     transition-property: transform;
+    transition-property: transform, -webkit-transform;
 }
 
 .intro-effect-fadeout:not(.notrans) .bg-img::after {
-    -webkit-transition-property: opacity;
     transition-property: opacity;
 }
 
 .intro-effect-fadeout:not(.notrans) .header h1 {
-    -webkit-transition-property: color;
     transition-property: color;
 }
 
 .intro-effect-fadeout:not(.notrans) .header p, .intro-effect-fadeout:not(.notrans) .content>div {
-    -webkit-transition-property: -webkit-transform, opacity;
+    transition-property: opacity, -webkit-transform;
     transition-property: transform, opacity;
+    transition-property: transform, opacity, -webkit-transform;
 }
 
 .intro-effect-fadeout:not(.notrans) .bg-img, .intro-effect-fadeout:not(.notrans) .bg-img::after, .intro-effect-fadeout:not(.notrans) .header h1, .intro-effect-fadeout:not(.notrans) .header p, .intro-effect-fadeout:not(.notrans) .content>div {
-    -webkit-transition-duration: 0.5s;
     transition-duration: 0.5s;
 }
 
@@ -407,7 +396,6 @@ button.trigger span::before {
     left: 0;
     opacity: 0;
     pointer-events: none;
-    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
 }
 
@@ -471,34 +459,31 @@ button.trigger span::before {
 /* -------------------------- */
 
 .intro-effect-sliced:not(.notrans) .bg-img, .intro-effect-sliced:not(.notrans) .title {
-    -webkit-transition-property: -webkit-transform;
+    transition-property: -webkit-transform;
     transition-property: transform;
+    transition-property: transform, -webkit-transform;
 }
 
 .intro-effect-sliced:not(.notrans) .header h1, .intro-effect-sliced:not(.notrans) .codrops-demos a {
-    -webkit-transition-property: color;
     transition-property: color;
 }
 
 .intro-effect-sliced:not(.notrans) .header p {
-    -webkit-transition-property: opacity;
     transition-property: opacity;
 }
 
 .intro-effect-sliced:not(.notrans) .content>div {
-    -webkit-transition-property: -webkit-transform, opacity;
+    transition-property: opacity, -webkit-transform;
     transition-property: transform, opacity;
+    transition-property: transform, opacity, -webkit-transform;
 }
 
 .intro-effect-sliced:not(.notrans) .bg-img, .intro-effect-sliced:not(.notrans) .header h1, .intro-effect-sliced:not(.notrans) .title, .intro-effect-sliced:not(.notrans) .header p, .intro-effect-sliced:not(.notrans) .content>div, .intro-effect-sliced:not(.notrans) .codrops-demos a {
-    -webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
     transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-    -webkit-transition-duration: 0.5s;
     transition-duration: 0.5s;
 }
 
 .intro-effect-sliced.modify:not(.notrans) .header h1, .intro-effect-sliced.modify:not(.notrans) .title, .intro-effect-sliced.modify:not(.notrans) .header p, .intro-effect-sliced.modify:not(.notrans) .content>div, .intro-effect-sliced.modify:not(.notrans) .codrops-demos a {
-    -webkit-transition-timing-function: ease;
     transition-timing-function: ease;
 }
 
@@ -578,7 +563,6 @@ button.trigger span::before {
 /* Delays */
 
 .intro-effect-sliced.modify:not(.notrans) .title {
-    -webkit-transition-delay: 0.15s;
     transition-delay: 0.15s;
 }
 
@@ -592,29 +576,27 @@ button.trigger span::before {
 /* -------------------------- */
 
 .intro-effect-side:not(.notrans) .bg-img::before, .intro-effect-side:not(.notrans) .title {
-    -webkit-transition-property: -webkit-transform;
+    transition-property: -webkit-transform;
     transition-property: transform;
+    transition-property: transform, -webkit-transform;
 }
 
 .intro-effect-side:not(.notrans) .bg-img::after {
-    -webkit-transition-property: top, left, bottom, right, background-color;
     transition-property: top, left, bottom, right, background-color;
 }
 
 .intro-effect-side:not(.notrans) .header p {
-    -webkit-transition-property: -webkit-transform, opacity;
+    transition-property: opacity, -webkit-transform;
     transition-property: transform, opacity;
+    transition-property: transform, opacity, -webkit-transform;
 }
 
 .intro-effect-side:not(.notrans) .content>div {
-    -webkit-transition-property: opacity;
     transition-property: opacity;
 }
 
 .intro-effect-side:not(.notrans) .bg-img::before, .intro-effect-side:not(.notrans) .bg-img::after, .intro-effect-side:not(.notrans) .title, .intro-effect-side:not(.notrans) .header p, .intro-effect-side:not(.notrans) .content>div {
-    -webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
     transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-    -webkit-transition-duration: 0.5s;
     transition-duration: 0.5s;
 }
 
@@ -868,27 +850,22 @@ button.trigger span::before {
 /* Delays */
 
 .intro-effect-side:not(.notrans) .title, .intro-effect-side:not(.notrans) .bg-img::before, .intro-effect-side:not(.notrans) .bg-img::after {
-    -webkit-transition-delay: 0.3s;
     transition-delay: 0.3s;
 }
 
 .intro-effect-side.modify:not(.notrans) .title, .intro-effect-side.modify:not(.notrans) .bg-img::before, .intro-effect-side.modify:not(.notrans) .bg-img::after {
-    -webkit-transition-delay: 0s;
     transition-delay: 0s;
 }
 
 .intro-effect-side.modify:not(.notrans) .header p:nth-last-child(2) {
-    -webkit-transition-delay: 0.15s;
     transition-delay: 0.15s;
 }
 
 .intro-effect-side.modify:not(.notrans) .header p:last-child {
-    -webkit-transition-delay: 0.2s;
     transition-delay: 0.2s;
 }
 
 .intro-effect-side.modify:not(.notrans) .content>div {
-    -webkit-transition-delay: 0.3s;
     transition-delay: 0.3s;
 }
 
@@ -902,29 +879,27 @@ button.trigger span::before {
 /* -------------------------- */
 
 .intro-effect-sidefixed:not(.notrans) .bg-img::before {
-    -webkit-transition-property: background-color;
     transition-property: background-color;
 }
 
 .intro-effect-sidefixed:not(.notrans) .bg-img::after {
-    -webkit-transition-property: -webkit-transform;
+    transition-property: -webkit-transform;
     transition-property: transform;
+    transition-property: transform, -webkit-transform;
 }
 
 .intro-effect-sidefixed:not(.notrans) .title p {
-    -webkit-transition-property: opacity;
     transition-property: opacity;
 }
 
 .intro-effect-sidefixed:not(.notrans) .content>div {
-    -webkit-transition-property: -webkit-transform, opacity;
+    transition-property: opacity, -webkit-transform;
     transition-property: transform, opacity;
+    transition-property: transform, opacity, -webkit-transform;
 }
 
 .intro-effect-sidefixed:not(.notrans) .bg-img::before, .intro-effect-sidefixed:not(.notrans) .bg-img::after, .intro-effect-sidefixed:not(.notrans) .title p, .intro-effect-sidefixed:not(.notrans) .content>div {
-    -webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
     transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-    -webkit-transition-duration: 0.5s;
     transition-duration: 0.5s;
 }
 
@@ -1034,17 +1009,14 @@ button.trigger span::before {
 /* Delays */
 
 .intro-effect-sidefixed:not(.notrans) .title, .intro-effect-sidefixed:not(.notrans) .bg-img::before, .intro-effect-sidefixed:not(.notrans) .bg-img::after {
-    -webkit-transition-delay: 0.3s;
     transition-delay: 0.3s;
 }
 
 .intro-effect-sidefixed.modify:not(.notrans) .title, .intro-effect-sidefixed.modify:not(.notrans) .bg-img::before, .intro-effect-sidefixed.modify:not(.notrans) .bg-img::after {
-    -webkit-transition-delay: 0s;
     transition-delay: 0s;
 }
 
 .intro-effect-sidefixed.modify:not(.notrans) .content div:nth-child(2) {
-    -webkit-transition-delay: 0.15s;
     transition-delay: 0.15s;
 }
 
@@ -1058,16 +1030,14 @@ button.trigger span::before {
 /* -------------------------- */
 
 .intro-effect-push:not(.notrans) .header, .intro-effect-push:not(.notrans)>.title, .intro-effect-push:not(.notrans) .content>div {
-    -webkit-transition-property: opacity, -webkit-transform;
+    transition-property: opacity, -webkit-transform;
     transition-property: opacity, transform;
-    -webkit-transition-duration: 1s;
+    transition-property: opacity, transform, -webkit-transform;
     transition-duration: 1s;
 }
 
 .intro-effect-push:not(.notrans) .header {
-    -webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
     transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-    -webkit-transition-duration: 1.2s;
     transition-duration: 1.2s;
 }
 
@@ -1114,12 +1084,10 @@ button.trigger span::before {
 /* Delays */
 
 .intro-effect-push.modify:not(.notrans)>.title {
-    -webkit-transition-delay: 0.5s;
     transition-delay: 0.5s;
 }
 
 .intro-effect-push.modify:not(.notrans) .content>div {
-    -webkit-transition-delay: 0.6s;
     transition-delay: 0.6s;
 }
 
@@ -1133,29 +1101,27 @@ button.trigger span::before {
 /* -------------------------- */
 
 .intro-effect-grid:not(.notrans) .grid li:nth-child(5) {
-    -webkit-transition-property: -webkit-transform, opacity;
+    transition-property: opacity, -webkit-transform;
     transition-property: transform, opacity;
+    transition-property: transform, opacity, -webkit-transform;
 }
 
 .intro-effect-grid:not(.notrans) .header p {
-    -webkit-transition-property: opacity;
     transition-property: opacity;
 }
 
 .intro-effect-grid:not(.notrans) .bg-img, .intro-effect-grid:not(.notrans) .title {
-    -webkit-transition-property: -webkit-transform;
+    transition-property: -webkit-transform;
     transition-property: transform;
+    transition-property: transform, -webkit-transform;
 }
 
 .intro-effect-grid:not(.notrans) .header h1, .intro-effect-grid:not(.notrans) .codrops-demos a {
-    -webkit-transition-property: color;
     transition-property: color;
 }
 
 .intro-effect-grid:not(.notrans) .grid li:nth-child(5), .intro-effect-grid:not(.notrans) .bg-img, .intro-effect-grid:not(.notrans) .title, .intro-effect-grid:not(.notrans) .header h1, .intro-effect-grid:not(.notrans) .header p, .intro-effect-grid:not(.notrans) .codrops-demos a {
-    -webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
     transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-    -webkit-transition-duration: 1s;
     transition-duration: 1s;
 }
 
@@ -1234,7 +1200,6 @@ button.trigger span::before {
     left: 0;
     background: rgba(71, 63, 59, 0.5);
     pointer-events: none;
-    -webkit-transition: background 0.3s;
     transition: background 0.3s;
 }
 
@@ -1264,8 +1229,9 @@ button.trigger span::before {
     position: absolute;
     bottom: 0;
     z-index: 100;
-    -webkit-transition: -webkit-transform 0.3s;
+    transition: -webkit-transform 0.3s;
     transition: transform 0.3s;
+    transition: transform 0.3s, -webkit-transform 0.3s;
 }
 
 .intro-effect-grid .grid li:hover h2 {
