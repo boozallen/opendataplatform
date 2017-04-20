@@ -42,7 +42,7 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     display: block;
     width: 100%;
-		transition: all 1s ease;
+		transition: width 1s ease;
 }
 
 .intro-effect-side.modify .bg-img img {
@@ -746,7 +746,7 @@ button.trigger span::before {
 		margin-bottom: 2%;
 		width: 35%;
 		height: 50px;
-		transition: all 1s ease;
+		transition: width 1s ease;
 }
 
 .intro-effect-side .logo-odp {
@@ -756,7 +756,7 @@ button.trigger span::before {
 		background-size: 100%;
 		width: 55%;
 		height: 100px;
-		transition: all 1s ease;
+		transition: width 4s ease;
 }
 
 .intro-effect-side .header h3 {
@@ -769,7 +769,7 @@ button.trigger span::before {
 .intro-effect-side.modify .logo-bah,
 .intro-effect-side.modify .header h3 {
 		display: none;
-		transition: all 2s ease;
+		transition: all 1s ease;
 }
 
 .intro-effect-side.modify .logo-odp {
@@ -777,7 +777,7 @@ button.trigger span::before {
 		background: url('../img/logo-odp-color.png') center center no-repeat;
 		background-size: 100%;
 		width: 65%;
-		transition: all 2s ease;
+		transition: width 1s ease;
 }
 
 .intro-effect-side .header p {
@@ -807,7 +807,7 @@ button.trigger span::before {
     background: #cddc2b;
     border: 0;
 		margin: 5em 0 .1em 0;
-		transition: all 1s ease;
+		transition: opacity 2s ease;
 }
 
 .intro-effect-side p.github {
@@ -817,7 +817,7 @@ button.trigger span::before {
 		color: transparent;
 		margin-top: 20px;
 		float: right;
-		transition: all 1s ease;
+		transition: opacity 2s ease;
 }
 
 .intro-effect-side.modify p.github {
