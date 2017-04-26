@@ -1,4 +1,0 @@
-[submodule "odp-data-nifi"]
-	path = odp-data-nifi
-	url = https://github.com/boozallen/odp-data-nifi
-	branch = master
