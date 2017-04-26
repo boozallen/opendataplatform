@@ -1,6 +1,6 @@
 # Open Data Platform
 ## Intent
-Develop a converged open data platform that can be rapidly deployed and tailored to meet client needs and accelerate solution delivery
+Develop a converged open data platform that can be rapidly deployed and tailored to accelerate solution delivery
 
 ## Capabilities
 * Package an open source [natural language processing](http://stanfordnlp.github.io/CoreNLP) (NLP) tool suite as a ready-to-use entity extraction capability using [Docker](https://www.docker.com/)
