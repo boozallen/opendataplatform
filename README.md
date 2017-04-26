@@ -10,4 +10,4 @@ Develop a converged open data platform that can be rapidly deployed and tailored
 
 ## Logical Architecture
 
-![alt text](https://github.boozallencsn.com/odp/odp-data-nifi/raw/master/docs/images/logical_arch.png "Logical Architecture")
+![alt text](https://github.com/boozallen/opendataplatform/raw/master/docs/images/logical_arch.png "Logical Architecture")
