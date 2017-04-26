@@ -2,3 +2,7 @@
 	path = odp-data-nifi
 	url = https://github.com/boozallen/odp-data-nifi
 	branch = master
+[submodule "odp-data-corenlp"]
+	path = odp-data-corenlp
+	url = https://github.com/boozallen/odp-data-corenlp
+	branch = master
