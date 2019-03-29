@@ -1,0 +1,184 @@
+{
+  "host_groups" : [
+    {
+      "name" : "master",
+      "components" : [
+      {
+        "name" : "NAMENODE"
+      },
+      {
+        "name" : "HISTORYSERVER"
+      },
+      {
+        "name" : "SPARK_CLIENT"
+      },
+      {
+        "name" : "NODEMANAGER"
+      },
+      {
+        "name": "KAFKA_BROKER"
+      },
+      {
+        "name" : "OOZIE_SERVER"
+      },
+      {
+        "name" : "ZEPPELIN_MASTER"
+      },
+      {
+        "name" : "DATANODE"
+      },
+      {
+        "name" : "TEZ_CLIENT"
+      },
+      {
+        "name" : "HDFS_CLIENT"
+      },
+      {
+        "name" : "HBASE_CLIENT"
+      },
+      {
+        "name" : "HBASE_REGIONSERVER"
+      }
+      ],
+      "cardinality" : "1"
+    },
+    {
+      "name" : "server1",
+      "components" : [
+      {
+        "name" : "SECONDARY_NAMENODE"
+      },
+      {
+        "name" : "ZOOKEEPER_SERVER"
+      },
+      {
+        "name" : "SPARK_JOBHISTORYSERVER"
+      },
+      {
+        "name" : "SPARK_CLIENT"
+      },
+      {
+        "name": "KAFKA_BROKER"
+      },
+      {
+        "name" : "TEZ_CLIENT"
+      },
+      {
+        "name" : "HDFS_CLIENT"
+      },
+      {
+        "name" : "HBASE_MASTER"
+      },
+      {
+        "name" : "HBASE_REGIONSERVER"
+      },
+      {
+        "name" : "HBASE_CLIENT"
+      },
+      {
+        "name" : "DATANODE"
+      },
+      {
+        "name" : "WEBHCAT_SERVER"
+      }
+      ],
+      "cardinality" : "1"
+    },
+    {
+      "name" : "server2",
+      "components" : [
+      {
+        "name" : "RESOURCEMANAGER"
+      },
+      {
+        "name" : "MYSQL_SERVER"
+      },
+      {
+        "name" : "HIVE_METASTORE"
+      },
+      {
+        "name" : "HIVE_SERVER"
+      },
+      {
+        "name" : "APP_TIMELINE_SERVER"
+      },
+      {
+        "name" : "ZOOKEEPER_CLIENT"
+      },
+      {
+        "name" : "SPARK_CLIENT"
+      },
+      {
+        "name": "KAFKA_BROKER"
+      },
+      {
+        "name" : "MAPREDUCE2_CLIENT"
+      },
+      {
+        "name" : "DATANODE"
+      },
+      {
+        "name" : "HBASE_REGIONSERVER"
+      },
+      {
+        "name" : "HBASE_CLIENT"
+      },
+      {
+        "name" : "TEZ_CLIENT"
+      },
+      {
+        "name" : "HDFS_CLIENT"
+      }
+      ],
+      "cardinality" : "1"
+    },
+    {
+      "name" : "clients",
+      "components" : [
+      {
+        "name" : "ZOOKEEPER_CLIENT"
+      },
+      {
+        "name" : "SPARK_CLIENT"
+      },
+      {
+        "name" : "HIVE_CLIENT"
+      },
+      {
+        "name" : "OOZIE_CLIENT"
+      },
+      {
+        "name": "KAFKA_BROKER"
+      },
+      {
+        "name" : "TEZ_CLIENT"
+      },
+      {
+        "name" : "YARN_CLIENT"
+      },
+      {
+        "name" : "MAPREDUCE2_CLIENT"
+      },
+      {
+        "name" : "TEZ_CLIENT"
+      },
+      {
+        "name" : "HDFS_CLIENT"
+      },
+      {
+        "name" : "DATANODE"
+      },
+      {
+        "name" : "HBASE_CLIENT"
+      }
+      ],
+      "cardinality" : "2"
+    }
+  ],
+  "Blueprints" :
+  {
+    "blueprint_name" : "hdp-stack",
+    "stack_name" : "HDP",
+    "stack_version" : "{{ hdp_stack_version }}"
+  }
+}

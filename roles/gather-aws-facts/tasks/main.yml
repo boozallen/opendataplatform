@@ -1,0 +1,29 @@
+---
+
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+# Gather all facts from AWS to build out Ansible variables
+- name: Gather EC2 facts for management server
+  ec2_remote_facts:
+    region: "{{ aws_region }}"
+    filters:
+      instance-state-name: running
+      "tag:Role": "{{ aws_unique_identifier }}-management-server"
+  register: ec2_management_facts
+
+- name: Gather EC2 facts for client servers
+  ec2_remote_facts:
+    region: "{{ aws_region }}"
+    filters:
+      instance-state-name: running
+      "tag:Role": "{{ aws_unique_identifier }}-client-servers"
+  register: ec2_client_facts
+
+- name: Gather EC2 facts for enk server
+  ec2_remote_facts:
+    region: "{{ aws_region }}"
+    filters:
+      instance-state-name: running
+      "tag:Role": "{{ aws_unique_identifier }}-enk-server"
+  register: ec2_enk_facts

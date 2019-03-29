@@ -1,0 +1,12 @@
+---
+
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+- name: "Add /etc/hosts entry for {{ item.private_dns_name }}"
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ item.private_ip_address }} {{ item.private_dns_name }}"
+  with_items:
+    - "{{ ec2_management_facts_vars.instances|list }}"
+    - "{{ ec2_client_facts_vars.instances|list }}"

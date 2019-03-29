@@ -1,0 +1,10 @@
+---
+
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+- name: Set SELinux to Permissive and Targeted
+  selinux:
+    policy: targeted
+    state: permissive
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'

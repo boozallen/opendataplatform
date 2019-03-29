@@ -1,0 +1,64 @@
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+- name: Create new Ambari admin user
+  uri:
+    url: "http://{{ ambari_api_address }}:8080/api/v1/users"
+    method: POST
+    return_content: yes
+    HEADER_Content-Type: "text/plain"
+    HEADER_X-Requested-By: "ODP"
+    user: "admin"
+    password: "admin"
+    force_basic_auth: yes
+    body: "{ \"Users/user_name\": \"{{ management_console_username }}\", \"Users/password\":  \"{{ management_console_password }}\", \"Users/active\": true, \"Users/admin\": true }"
+    body_format: json
+    status_code: 201
+  no_log: True
+
+- name: Remove default Ambari admin user
+  uri:
+    url: "http://{{ ambari_api_address }}:8080/api/v1/users/admin"
+    method: DELETE
+    return_content: yes
+    HEADER_Content-Type: "text/plain"
+    HEADER_X-Requested-By: "ODP"
+    user: "{{ management_console_username }}"
+    password: "{{ management_console_password }}"
+    force_basic_auth: yes
+    status_code: 200
+  no_log: True
+
+- name: Define HDP Cluster Ambari Blueprint using public access
+  uri:
+    url: "http://{{ ambari_api_address }}:8080/api/v1/blueprints/hdp-stack"
+    method: POST
+    return_content: yes
+    HEADER_Content-Type: "text/plain"
+    HEADER_X-Requested-By: "ODP"
+    user: "{{ management_console_username }}"
+    password: "{{ management_console_password }}"
+    force_basic_auth: yes
+    body: "{{ lookup('file','hdp-stack.json') }}"
+    body_format: json
+    status_code: 201,409
+  no_log: True
+
+- name: Pause to allow Blueprint Upload to complete
+  pause:
+    seconds: 10
+
+- name: Deploy HDP Cluster Using Blueprint via public access
+  uri:
+    url: "http://{{ ambari_api_address }}:8080/api/v1/clusters/hdp-stack"
+    method: POST
+    return_content: yes
+    HEADER_Content-Type: "text/plain"
+    HEADER_X-Requested-By: "ODP"
+    user: "{{ management_console_username }}"
+    password: "{{ management_console_password }}"
+    force_basic_auth: yes
+    body: "{{ lookup('file','hdp-cluster.json') }}"
+    body_format: json
+    status_code: 202,409
+  no_log: True

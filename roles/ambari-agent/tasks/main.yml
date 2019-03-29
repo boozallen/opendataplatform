@@ -1,0 +1,98 @@
+---
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+# This Playbook sets up the Ambari Repository and installs the Ambari Agent
+
+- name: Create Ambari Repo for EL7 Distribution
+  yum_repository:
+    name: ambari-repo
+    description: Ambari Repo
+    baseurl: "{{ ambari_repo_7 }}"
+    gpgcheck: no
+    enabled: yes
+    priority: 3
+
+- name: Create HDP Repo
+  yum_repository:
+    name: hdp-repo
+    description: HDP Repo
+    baseurl: "{{ hdp_repo_7 }}"
+    gpgcheck: no
+    enabled: yes
+    priority: 1
+
+- name: Create HDP Utils Repo
+  yum_repository:
+    name: hdp-utils-repo
+    description: HDP Utils Repo
+    baseurl: "{{ hdp_utils_repo_7 }}"
+    gpgcheck: no
+    enabled: yes
+    priority: 2
+
+- name: Remove default snappy package from EL distribution
+  yum:
+    pkg: snappy
+    state: removed
+  when:
+    - ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+    - ansible_distribution_major_version == '7'
+
+- name: Exclude snappy package from RHEL repository
+  lineinfile:
+    dest: /etc/yum.repos.d/redhat-rhui.repo
+    create: no
+    state: present
+    insertafter: '\[rhui\-REGION\-rhel\-server\-releases\]'
+    line: 'exclude=snappy'
+  when:
+    - ansible_distribution == 'RedHat'
+    - ansible_distribution_major_version == '7'
+
+- name: Exclude snappy package from CentOS Base repository
+  lineinfile:
+    dest: /etc/yum.repos.d/CentOS-Base.repo
+    create: no
+    state: present
+    insertafter: '\[base\]'
+    line: 'exclude=snappy'
+  when:
+    - ansible_distribution == 'CentOS'
+    - ansible_distribution_major_version == '7'
+
+- name: Enable RHEL Server Optional Repo
+  command: yum-config-manager --enable rhui-REGION-rhel-server-optional
+  when:
+    - ansible_distribution == 'RedHat'
+    - ansible_distribution_major_version == '7'
+
+- name: Install yum-plugin-priorities
+  yum:
+    pkg: yum-plugin-priorities
+    state: installed
+
+- name: Update yum metadata for priorities to take effect
+  command: yum clean all
+
+- name: Install Ambari Agent
+  yum:
+    pkg: ambari-agent
+    state: installed
+
+- name: Configure Ambari agent to register at Ambari server
+  lineinfile:
+    dest: /etc/ambari-agent/conf/ambari-agent.ini
+    create: no
+    state: present
+    regexp: 'hostname=.*'
+    line: 'hostname={{ ec2_management_facts_vars.instances[0].private_dns_name }}'
+
+- name: Register Ambari agent pid file
+  stat:
+    path: /var/run/ambari-agent/ambari-agent.pid
+  register: ambari_agent_pid
+
+- name: Start Ambari agent
+  command: 'ambari-agent start'
+  when: ambari_agent_pid.stat.exists == False

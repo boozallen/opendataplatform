@@ -1,0 +1,42 @@
+#jinja2: trim_blocks:False 
+[MANAGER]
+management_server_api={% if aws_access_mode == "public" %}{{ ec2_management_facts_vars.instances[0].public_dns_name }}{% else %}{{ ec2_management_facts_vars.instances[0].private_dns_name }}{% endif %}
+management_server={{ ec2_management_facts_vars.instances[0].private_dns_name }}
+management_console_username={{ management_console_username }}
+
+[HOSTS]
+{% for client in ec2_client_facts_vars.instances|list %}
+client{{ loop.index }}={{ client.private_dns_name }}
+{% endfor %}
+
+[USERS]
+aws_user={{ aws_user }}
+aws_user_ssh_key=/home/{{ aws_user }}/.ssh/id_rsa
+
+[CLOUDERA_MGMT_SERVICE]
+clouderadb=clouderadb
+clouderadbuser=cloudera_scm
+clouderadbtype=postgresql
+clouderadbhost=127.0.0.1
+
+[CLOUDERA_PROPERTIES]
+hive_metastore_db_host=127.0.0.1
+hive_metastore_db_name=clouderadb
+hive_metastore_db_user=hiveuser
+hue_db_host=127.0.0.1
+hue_db_name=huedb
+hue_db_user=hueuser
+oozie_db_host=localhost:5432
+oozie_db_name=ooziedb
+oozie_db_user=oozieuser
+api_version={{ api_version }}
+
+[REPOS]
+cloudera_manager_repo={{ cloudera_manager_repo }}
+cloudera_manager_repo_gpg={{ cloudera_manager_repo_gpg }}
+
+[PARCELS]
+parcel_repo_url={{ cloudera_parcel_repo }}
+cdh_parcel_version={{ cdh_parcel_version }}
+kafka_parcel_repo={{ kafka_parcel_repo }}
+kafka_parcel_version={{ kafka_parcel_version }}

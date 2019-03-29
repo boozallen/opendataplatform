@@ -1,0 +1,16 @@
+---
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+# Provision AWS instances and configure Ansible with facts
+- hosts: localhost
+  connection: local
+  roles:
+  - role: provision-aws
+    instance_vars: "{{ hostvars['localhost']['aws_instances'] }}"
+  - role: gather-aws-facts
+  - role: ansible-config
+    ec2_management_facts_vars: "{{ hostvars['localhost']['ec2_management_facts'] }}"
+    ec2_client_facts_vars: "{{ hostvars['localhost']['ec2_client_facts'] }}"
+    ec2_enk_facts_vars: "{{ hostvars['localhost']['ec2_enk_facts'] }}"
+

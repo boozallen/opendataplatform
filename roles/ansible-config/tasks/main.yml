@@ -1,0 +1,79 @@
+---
+
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+# Populate ansible groups based on EC2 facts in order to perform further processing
+- name: Instances to add to host group...
+  debug:
+    msg: "***** Instance: {{ item.tags.Role }} - {{ item.public_ip_address }}"
+  with_items:
+    - "{{ ec2_management_facts_vars.instances|list }}"
+    - "{{ ec2_client_facts_vars.instances|list }}"
+    - "{{ ec2_enk_facts_vars.instances|list }}"
+
+# Public access setup
+- name: Add management instance to role group using public access.
+  add_host:
+    groups: management-server
+    hostname: "{{ item.public_ip_address }}"
+    ansible_user: "{{ aws_user }}"
+    public_ip_address: "{{ item.public_ip_address }}"
+  with_items:
+    - "{{ ec2_management_facts_vars.instances|list }}"
+  when: aws_access_mode == 'public'
+
+- name: Add client instances to their role group using public access.
+  add_host:
+    groups: client-servers
+    hostname: "{{ item.public_ip_address }}"
+    ansible_user: "{{ aws_user }}"
+    public_ip_address: "{{ item.public_ip_address }}"
+  with_items:
+    - "{{ ec2_client_facts_vars.instances|list }}"
+  when: aws_access_mode == 'public'
+
+- name: Add enk instance to the role group using public access.
+  add_host:
+    groups: enk-server
+    hostname: "{{ item.public_ip_address }}"
+    ansible_user: "{{ aws_user }}"
+    public_ip_address: "{{ item.public_ip_address }}"
+  with_items:
+    - "{{ ec2_enk_facts_vars.instances|list }}"
+  when: aws_access_mode == 'public'
+
+# Private access setup
+- name: Add management instance to role group using private access.
+  add_host:
+    groups: management-server
+    hostname: "{{ item.private_ip_address }}"
+    ansible_user: "{{ aws_user }}"
+    private_ip_address: "{{ item.private_ip_address }}"
+  with_items:
+    - "{{ ec2_management_facts_vars.instances|list }}"
+  when: aws_access_mode == 'private'
+
+- name: Add client instances to their role group using private access.
+  add_host:
+    groups: client-servers
+    hostname: "{{ item.private_ip_address }}"
+    ansible_user: "{{ aws_user }}"
+    private_ip_address: "{{ item.private_ip_address }}"
+  with_items:
+    - "{{ ec2_client_facts_vars.instances|list }}"
+  when: aws_access_mode == 'private'
+
+- name: Add enk instance to the role group using private access.
+  add_host:
+    groups: enk-server
+    hostname: "{{ item.private_ip_address }}"
+    ansible_user: "{{ aws_user }}"
+    private_ip_address: "{{ item.private_ip_address }}"
+  with_items:
+    - "{{ ec2_enk_facts_vars.instances|list }}"
+  when: aws_access_mode == 'private'
+
+- name: debug
+  debug:
+    msg: "***** Ansible Groups: {{ groups }}"

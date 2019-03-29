@@ -1,0 +1,205 @@
+---
+
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+# Enable Optional and Extras repos for RHEL Distribution
+- name: Enable Optional and Extras repos for RHEL Distribution
+  command: yum-config-manager --enable {{ item }}
+  with_items:
+    - rhui-REGION-rhel-server-optional
+    - rhui-REGION-rhel-server-extras
+  when: ansible_distribution == 'RedHat'
+
+- name: Download EPEL RPM
+  get_url:
+    url: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    dest: /root/epel-release-latest-7.noarch.rpm
+  when: ansible_distribution == 'RedHat'
+
+- name: Install EPEL RPM
+  yum:
+    name: /root/epel-release-latest-7.noarch.rpm
+    state: present
+  when: ansible_distribution == 'RedHat'
+
+# Create EPEL Repository to install python-pip
+- name: Create EPEL Repository
+  yum:
+    name: epel-release
+    state: installed
+  when: ansible_distribution == 'CentOS'
+
+# Install PostgreSQL for Cloudera and JDBC Driver for Hive Metastore service
+- name: Install PostgreSQL and pip
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - postgresql-server
+    - postgresql-jdbc
+    - python-pip
+
+# Use pip to install cm_api
+- name: Install Cloudera Manager Python API Client
+  pip:
+    name: cm-api
+
+- stat:
+    path: /var/lib/pgsql/data/pg_hba.conf
+  register: pgsql_conf_file
+
+- name: Initialize PostgreSQL Database
+  command: 'postgresql-setup initdb'
+  when: pgsql_conf_file.stat.exists == False
+
+- name: Configure md5 authentication to PostgreSQL for IPv4
+  lineinfile:
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    create: no
+    state: present
+    insertbefore: '^host(\s*)all(\s*)all(\s*)127.0.0.1\/32(\s*)ident'
+    line: 'host all all 127.0.0.1/32 md5'
+
+- name: Configure md5 authentication to PostgreSQL for IPv6
+  lineinfile:
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    create: no
+    state: present
+    insertbefore: '^host(\s*)all(\s*)all(\s*)\:\:1\/128(\s*)ident'
+    line: 'host all all ::1/128 md5'
+
+- name: Remove ident authentication from PostgreSQL configuration
+  lineinfile:
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    state: absent
+    regexp: '^host(\s*)all(\s*)all(\s*)127.0.0.1\/32(\s*)ident'
+
+# Ensure postgresql is running and enabled
+- name: Restart PostgreSQL
+  service:
+    name: postgresql
+    state: restarted
+    enabled: yes
+
+- name: Pause to allow PostgreSQL to respond to queries
+  pause:
+    seconds: 30
+
+# Setup user and database for Cloudera
+- name: Create Cloudera users for PostgreSQL
+  script: postgres_init.sh {{ cloudera_db_password }} {{ hive_metastore_db_password }} {{ hue_db_password }} {{ oozie_db_password }}
+  no_log: True
+
+# Install Cloudera Manager Server
+- name: Install Cloudera Manager Server
+  yum:
+    name: cloudera-manager-server
+    state: present
+
+# Set JAVA_HOME=/usr/java/jdk1.7.0_67-cloudera in /etc/default/cloudera-scm-server
+- name: Configure Cloudera Manager to use JDK 1.7.0_67-cloudera
+  lineinfile:
+    dest: /etc/default/cloudera-scm-server
+    create: no
+    state: present
+    regexp: 'JAVA_HOME=.*'
+    line: 'JAVA_HOME=/usr/java/jdk1.7.0_67-cloudera'
+
+# Run prepare script to setup utilities and configure Cloudera to use PostgreSQL
+- name: Run database setup utility script to prepare PostgreSQL for Cloudera
+  shell: "/usr/share/cmf/schema/scm_prepare_database.sh postgresql clouderadb cloudera_scm {{ cloudera_db_password }}"
+  no_log: True
+
+
+# Copy SSH Key for AWS User to be used by Cloudera Manager
+- name: Copy SSH key for AWS User to be used by Cloudera Manager
+  copy:
+    src: "{{ lookup('env','HOME') }}/.ssh/id_rsa"
+    dest: "/home/{{ aws_user }}/.ssh/id_rsa"
+    owner: "{{ aws_user }}"
+    mode: 0400
+
+# Start Cloudera Manager Service
+- name: Start Cloudera Manager Service
+  service:
+    name: cloudera-scm-server
+    state: started
+    enabled: yes
+
+# Allow Cloudera Manager to run initial DB schema scripts
+- name: Pause to allow Cloudera Manager to complete auto-configuration during initial startup
+  pause:
+    seconds: 90
+
+# Create properties file for Python API script
+- name: Create property file for Python API script
+  template:
+    src: templates/cloudera-props.j2
+    dest: /root/cloudera.ini
+    owner: root
+    mode: 0400
+
+# Run Python API setup script
+- name: Run Python API setup script to deploy Cloudera Manager and download parcels
+  script: cloudera_deploy.py {{ management_console_password }} {{ cloudera_db_password }}
+  no_log: True
+
+# Pause to allow cluster restart to fully complete
+- name: Pause to allow parcel activation to fully complete
+  pause:
+    seconds: 30
+
+# Copy PostgreSQL Driver to HIVE
+- name: Copy PostgreSQL driver to HIVE path
+  copy:
+    src: /usr/share/java/postgresql-jdbc.jar
+    dest: /opt/cloudera/parcels/CDH/lib/hive/lib/postgresql-jdbc.jar
+    remote_src: True
+    owner: root
+    group: root
+    mode: 0755
+
+# Configure PostgreSQL for HIVE
+- name: Run database configuration script for HIVE in PostgreSQL
+  command: 'su -c "psql -d metastore -f /opt/cloudera/parcels/CDH/lib/hive/scripts/metastore/upgrade/postgres/hive-schema-1.1.0.postgres.sql" - postgres'
+
+# Configure privileges on HIVE user tables
+- name: Copy privileges configuration script for HIVE to PostgreSQL server
+  copy:
+    src: files/hive_metastore_conf.sql
+    dest: /var/lib/pgsql/hive_metastore_conf.sql
+    owner: postgres
+    group: postgres
+    mode: 0700
+
+- name: Run privileges configuration script for HIVE in PostgreSQL
+  command: 'su -c "psql -d metastore -f /var/lib/pgsql/hive_metastore_conf.sql" - postgres'
+
+# Pause to allow Postgres to accept connections
+- name: Pause to allow Postgres to accept connections
+  pause:
+    seconds: 30
+
+# Run Python API script to configure Cloudera services
+- name: Run Python API script to install and configure Cloudera services
+  script: cloudera_configure.py {{ management_console_password }} {{ hive_metastore_db_password }} {{ hue_db_password }} {{ oozie_db_password }}
+  no_log: True
+
+# Run commands to create spark history log directory
+- name: Create Spark job history directory in hdfs
+  shell: |
+    sudo -u hdfs hdfs dfs -mkdir /user/spark
+    sudo -u hdfs hdfs dfs -mkdir /user/spark/applicationHistory
+    sudo -u hdfs hdfs dfs -chown -R spark:spark /user/spark
+    sudo -u hdfs hdfs dfs -chmod 1777 /user/spark/applicationHistory
+
+# Run Python API script to configure Cloudera Spark
+- name: Run Python API script to install and configure Spark service
+  script: cloudera_spark.py {{ management_console_password }} {{ hive_metastore_db_password }} {{ hue_db_password }} {{ oozie_db_password }}
+
+# Clean up remote files
+- name: Clean up remote files
+  file:
+    path: /root/cloudera.ini
+    state: absent

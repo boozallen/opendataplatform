@@ -1,0 +1,59 @@
+---
+
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+# Provision AWS EC2 Instances
+- import_playbook: provision_aws.yml
+- import_playbook: provision_elastic_nifi_kibana.yml
+##########################
+### Hortonworks Deployment
+
+# Configure Ambari Agent and SELinux on all servers
+- hosts: client-servers:management-server
+  user: "{{ aws_user }}"
+  become: yes
+  become_method: sudo
+  roles:
+  - role: selinux
+  - role: hosts-setup
+    ec2_management_facts_vars: "{{ hostvars['localhost']['ec2_management_facts'] }}"
+    ec2_client_facts_vars: "{{ hostvars['localhost']['ec2_client_facts'] }}"
+  - role: ambari-agent
+    ec2_management_facts_vars: "{{ hostvars['localhost']['ec2_management_facts'] }}"
+
+# Create Ambari blueprint and cluser definition files locally
+- hosts: localhost
+  connection: local
+  user: "{{ lookup('env','USER') }}"
+  roles:
+  - role: ambari-local
+    ec2_management_facts_vars: "{{ hostvars['localhost']['ec2_management_facts'] }}"
+    ec2_client_facts_vars: "{{ hostvars['localhost']['ec2_client_facts'] }}"
+
+# Configure Ambari Server on management server
+- hosts: management-server
+  user: "{{ aws_user }}"
+  become: yes
+  become_method: sudo
+  roles:
+  - role: ambari-server-install
+    ec2_management_facts_vars: "{{ hostvars['localhost']['ec2_management_facts'] }}"
+    ec2_client_facts_vars: "{{ hostvars['localhost']['ec2_client_facts'] }}"
+  - role: ambari-server-configure
+    ambari_api_address: "{{ hostvars.localhost.ec2_management_facts.instances[0].public_ip_address }}"
+    when: aws_access_mode == 'public'
+  - role: ambari-server-configure
+    ambari_api_address: "{{ hostvars.localhost.ec2_management_facts.instances[0].private_ip_address }}"
+    when: aws_access_mode == 'private'
+
+# Display post-install information
+- hosts: localhost
+  connection: local
+  roles:
+    - role: post-install
+      ec2_management_facts_vars: "{{ hostvars['localhost']['ec2_management_facts'] }}"
+      ec2_enk_facts_vars: "{{ hostvars['localhost']['ec2_enk_facts'] }}"
+      deployment_type: "HortonWorks Data Platform"
+      console_name: "Ambari"
+      console_port: 8080

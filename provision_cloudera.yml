@@ -1,0 +1,43 @@
+---
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+# Provision AWS EC2 Instances
+- import_playbook: provision_aws.yml
+- import_playbook: provision_elastic_nifi_kibana.yml
+##########################
+### Cloudera Deployment
+
+# Configure all servers with requirements for Cloudera
+- hosts: client-servers:management-server
+  user: "{{ aws_user }}"
+  become: yes
+  become_method: sudo
+  roles:
+  - role: selinux
+  - role: hosts-setup
+    ec2_management_facts_vars: "{{ hostvars['localhost']['ec2_management_facts'] }}"
+    ec2_client_facts_vars: "{{ hostvars['localhost']['ec2_client_facts'] }}"
+  - role: cloudera-setup
+    ec2_management_facts_vars: "{{ hostvars['localhost']['ec2_management_facts'] }}"
+
+# Configure Cloudera Manager on management server
+- hosts: management-server
+  user: "{{ aws_user }}"
+  become: yes
+  become_method: sudo
+  roles:
+  - role: cloudera-manager
+    ec2_management_facts_vars: "{{ hostvars['localhost']['ec2_management_facts'] }}"
+    ec2_client_facts_vars: "{{ hostvars['localhost']['ec2_client_facts'] }}"
+
+# Display post-install information
+- hosts: localhost
+  connection: local
+  roles:
+    - role: post-install
+      ec2_management_facts_vars: "{{ hostvars['localhost']['ec2_management_facts'] }}"
+      ec2_enk_facts_vars: "{{ hostvars['localhost']['ec2_enk_facts'] }}"
+      deployment_type: "Cloudera Enterprise"
+      console_name: "Cloudera Manager"
+      console_port: 7180

@@ -1,0 +1,52 @@
+---
+
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+- name: Create EC2 Instances
+  ec2:
+      region: "{{ item.value.region }}"
+      count_tag:
+        Name: "{{ item.value.instance_tags.Name }}"
+      exact_count: "{{ item.value.exact_count }}"
+      group: "{{ item.value.security_group }}"
+      instance_tags: "{{ item.value.instance_tags }}"
+      image: "{{ item.value.image }}"
+      instance_type: "{{ item.value.instance_type }}"
+      key_name: "{{ item.value.keypair }}"
+      volumes: "{{ item.value.volumes }}"
+      vpc_subnet_id: "{{ item.value.subnet_id }}"
+      wait: "{{ item.value.wait }}"
+  register: instances_facts
+  with_dict: "{{ instance_vars }}"
+
+# Public access setup
+- name: Wait for public SSH to come up before further processing
+  wait_for: host={{ item.1.public_ip }} port=22 timeout=600 state=started
+  with_subelements:
+    - "{{ instances_facts.results }}"
+    - tagged_instances
+  when: aws_access_mode == 'public'
+
+- name: Accept new public ssh fingerprints
+  shell: ssh-keyscan -H {{ item.1.public_ip }} >> ~/.ssh/known_hosts
+  with_subelements:
+    - "{{ instances_facts.results }}"
+    - tagged_instances
+  when: aws_access_mode == 'public'
+
+# Private access setup
+- name: Wait for private SSH to come up before further processing
+  wait_for: host={{ item.1.private_ip }} port=22 timeout=600 state=started
+  with_subelements:
+    - "{{ instances_facts.results }}"
+    - tagged_instances
+  when: aws_access_mode == 'private'
+
+
+- name: Accept new private ssh fingerprints
+  shell: ssh-keyscan -H {{ item.1.private_ip }} >> ~/.ssh/known_hosts
+  with_subelements:
+    - "{{ instances_facts.results }}"
+    - tagged_instances
+  when: aws_access_mode == 'private'

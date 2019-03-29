@@ -1,0 +1,74 @@
+---
+
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+# Remove OpenJDK
+- name: Remove OpenJDK
+  yum:
+    name: java-*-openjdk
+    state: removed
+
+# Set up Cloudera Manager Yum repository
+- name: Add Cloudera Manager repository
+  yum_repository:
+    name: cloudera-manager
+    enabled: yes
+    description: Cloudera Manager
+    baseurl: "{{ cloudera_manager_repo }}"
+    gpgkey: "{{ cloudera_manager_repo_gpg }}"
+    gpgcheck: yes
+
+# Install Java from Cloudera Manager Repo
+- name: Install Java from Cloudera Manager Repo
+  yum:
+    name: oracle-j2sdk1.7
+    state: present
+
+# Configure alternatives for Java
+- name: Install alternatives for java
+  alternatives:
+    name: java
+    link: /usr/bin/java
+    path: /usr/java/jdk1.7.0_67-cloudera/bin/java
+    priority: 20000
+
+- name: Install alternatives for javac
+  alternatives:
+    name: javac
+    link: /usr/bin/javac
+    path: /usr/java/jdk1.7.0_67-cloudera/bin/javac
+    priority: 20000
+
+- name: Install alternatives for jar
+  alternatives:
+    name: jar
+    link: /usr/bin/jar
+    path: /usr/java/jdk1.7.0_67-cloudera/bin/jar
+    priority: 20000
+
+- name: Install alternatives for javaws
+  alternatives:
+    name: javaws
+    link: /usr/bin/javaws
+    path: /usr/java/jdk1.7.0_67-cloudera/bin/javaws
+    priority: 20000
+
+# Disable Transparent Huge Page Compaction
+- name: Disable Transparent Huge Page Compaction
+  shell: "echo never > /sys/kernel/mm/transparent_hugepage/{{ item }}"
+  with_items:
+    - enabled
+    - defrag
+
+# Set VM Swappiness to 10
+- name: Set VM Swappiness to 10
+  command: "sysctl vm.swappiness=10"
+
+- name: Persist VM Swappiness value of 10
+  lineinfile:
+    dest: /etc/sysctl.conf
+    create: no
+    state: present
+    regexp: 'vm.swappiness=.*'
+    line: 'vm.swappiness=10'

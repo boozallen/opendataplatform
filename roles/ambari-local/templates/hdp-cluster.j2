@@ -1,0 +1,76 @@
+{
+  "blueprint" : "hdp-stack",
+  "default_password" : "super-secret-password",
+  "configurations" : [
+    {
+      "configuration-type" : {
+
+      }
+    }
+  ],
+  "host_groups" :[
+    {
+      "name" : "master",
+      "configurations" : [
+        {
+          "configuration-type" : {
+
+          }
+        }
+      ],
+      "hosts" : [
+        {
+          "fqdn" : "{{ ec2_management_facts_vars.instances[0].private_dns_name }}"
+        }
+      ]
+    },
+    {
+      "name" : "server1",
+      "configurations" : [
+        {
+          "configuration-type" : {
+
+          }
+        }
+      ],
+      "hosts" : [
+        {
+          "fqdn" : "{{ ec2_client_facts_vars.instances[0].private_dns_name }}"
+        }
+      ]
+    },
+    {
+      "name" : "server2",
+      "configurations" : [
+        {
+          "configuration-type" : {
+
+          }
+        }
+      ],
+      "hosts" : [
+        {
+          "fqdn" : "{{ ec2_client_facts_vars.instances[1].private_dns_name }}"
+        }
+      ]
+    },
+    {
+      "name" : "clients",
+      "configurations" : [
+        {
+          "configuration-type" : {
+
+          }
+        }
+      ],
+      "hosts" : [
+        {
+          "fqdn" : "{{ ec2_client_facts_vars.instances[2].private_dns_name }}"
+        },
+        {
+          "fqdn" : "{{ ec2_client_facts_vars.instances[3].private_dns_name }}"
+        }
+      ]
+    }
+  ]
+}

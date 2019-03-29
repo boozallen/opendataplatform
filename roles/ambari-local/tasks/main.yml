@@ -1,0 +1,18 @@
+---
+
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+- name: Create Ambari Blueprint File
+  template:
+    src: templates/hdp-stack.j2
+    dest: "{{ playbook_dir }}/hdp-stack.json"
+    owner: "{{ lookup('env','USER') }}"
+    mode: 0500
+
+- name: Create Ambari Cluster Definition File
+  template:
+    src: templates/hdp-cluster.j2
+    dest: "{{ playbook_dir }}/hdp-cluster.json"
+    owner: "{{ lookup('env','USER') }}"
+    mode: 0500

@@ -1,0 +1,111 @@
+# This file defines the configuration of the AWS EC2 instances (keypair, names, security, volumes, etc) - it uses the properties within group_vars/all (relative to the root of the project)
+aws_instances:
+  management_server:
+    hostname: "odp-management"
+    exact_count: "1"
+    security_group: "{{ aws_security_group }}"
+    image: "{{ aws_image }}"
+    instance_tags:
+      Name: "{{ aws_unique_identifier }}-odp-mgmtserver"
+      Role: "{{ aws_unique_identifier }}-management-server"
+    instance_type: "{{ aws_management_instance_type }}"
+    state: "running"
+    wait: yes
+    keypair: "{{ aws_keypair }}"
+    region: "{{ aws_region }}"
+    subnet_id: "{{ aws_subnet_id }}"
+    volumes:
+      - device_name: "/dev/{{ aws_device_name }}"
+        device_type: gp2
+        volume_size: "{{ aws_management_server_volume_size }}"
+        delete_on_termination: yes
+  client_server_1:
+    exact_count: "1"
+    security_group: "{{ aws_security_group }}"
+    image: "{{ aws_image }}"
+    instance_tags:
+      Name: "{{ aws_unique_identifier }}-odp-clientserver1"
+      Role: "{{ aws_unique_identifier }}-client-servers"
+    instance_type: "{{ aws_client_instance_type }}"
+    state: "running"
+    keypair: "{{ aws_keypair }}"
+    region: "{{ aws_region }}"
+    subnet_id: "{{ aws_subnet_id }}"
+    wait: yes
+    volumes:
+      - device_name: "/dev/{{ aws_device_name }}"
+        device_type: gp2
+        volume_size: "{{ aws_client_server_volume_size }}"
+        delete_on_termination: yes
+  client_server_2:
+    exact_count: "1"
+    security_group: "{{ aws_security_group }}"
+    image: "{{ aws_image }}"
+    instance_tags:
+      Name: "{{ aws_unique_identifier }}-odp-clientserver2"
+      Role: "{{ aws_unique_identifier }}-client-servers"
+    instance_type: "{{ aws_client_instance_type }}"
+    state: "running"
+    keypair: "{{ aws_keypair }}"
+    region: "{{ aws_region }}"
+    subnet_id: "{{ aws_subnet_id }}"
+    wait: yes
+    volumes:
+      - device_name: "/dev/{{ aws_device_name }}"
+        device_type: gp2
+        volume_size: "{{ aws_client_server_volume_size }}"
+        delete_on_termination: yes
+  client_server_3:
+    exact_count: "1"
+    security_group: "{{ aws_security_group }}"
+    image: "{{ aws_image }}"
+    instance_tags:
+      Name: "{{ aws_unique_identifier }}-odp-clientserver3"
+      Role: "{{ aws_unique_identifier }}-client-servers"
+    instance_type: "{{ aws_client_instance_type }}"
+    state: "running"
+    keypair: "{{ aws_keypair }}"
+    region: "{{ aws_region }}"
+    subnet_id: "{{ aws_subnet_id }}"
+    wait: yes
+    volumes:
+      - device_name: "/dev/{{ aws_device_name }}"
+        device_type: gp2
+        volume_size: "{{ aws_client_server_volume_size }}"
+        delete_on_termination: yes
+  client_server_4:
+    exact_count: "1"
+    security_group: "{{ aws_security_group }}"
+    image: "{{ aws_image }}"
+    instance_tags:
+      Name: "{{ aws_unique_identifier }}-odp-clientserver4"
+      Role: "{{ aws_unique_identifier }}-client-servers"
+    instance_type: "{{ aws_client_instance_type }}"
+    state: "running"
+    keypair: "{{ aws_keypair }}"
+    region: "{{ aws_region }}"
+    subnet_id: "{{ aws_subnet_id }}"
+    wait: yes
+    volumes:
+      - device_name: "/dev/{{ aws_device_name }}"
+        device_type: gp2
+        volume_size: "{{ aws_client_server_volume_size }}"
+        delete_on_termination: yes
+  enk_server:
+    exact_count: "1"
+    security_group: "{{ aws_security_group }}"
+    image: "{{ aws_image }}"
+    instance_tags:
+      Name: "{{ aws_unique_identifier }}-odp-enkserver"
+      Role: "{{ aws_unique_identifier }}-enk-server"
+    instance_type: "{{ aws_enk_instance_type }}"
+    state: "running"
+    keypair: "{{ aws_keypair }}"
+    region: "{{ aws_region }}"
+    subnet_id: "{{ aws_subnet_id }}"
+    wait: yes
+    volumes:
+      - device_name: "/dev/{{ aws_device_name }}"
+        device_type: gp2
+        volume_size: "{{ aws_enk_server_volume_size }}"
+        delete_on_termination: yes

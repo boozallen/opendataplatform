@@ -1,0 +1,87 @@
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+- name: Enable Extras repo for RHEL Distribution
+  command: yum-config-manager --enable rhui-REGION-rhel-server-extras
+  when: ansible_distribution == 'RedHat'
+
+- name: Add Docker CE repo for RHEL Distribution
+  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  when: ansible_distribution == 'RedHat'
+
+- name: Install Docker on RHEL
+  yum:
+    name: docker-ce
+    state: present
+  when:
+    - ansible_distribution == 'RedHat'
+
+- name: Install Docker on CentOS
+  yum:
+    name: docker
+    state: present
+  when:
+    - ansible_distribution == 'CentOS'
+
+- name: Install iptables
+  yum:
+    name: iptables-services
+    state: present
+
+- name: Start Docker and iptables
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - docker
+    - iptables
+
+- name: Flush iptables
+  command: /sbin/iptables -F
+
+- name: Save iptables
+  command: /sbin/service iptables save
+
+- name: Configure iptables for docker
+  command: /sbin/ip link delete docker0
+
+- name: Restart docker
+  service:
+    name: docker
+    state: restarted
+
+- name: Pull ElasticSearch and Kibana images
+  command: docker pull docker.io/"{{ item }}"
+  with_items:
+    - elasticsearch:"{{ elastic_version }}"
+    - kibana:"{{ kibana_version }}"
+
+- name: Pull boozallen Nifi image
+  command: "docker pull boozallen/odp-data-nifi:{{ nifi_version }}"
+
+- name: Create docker network
+  command: docker network create elastic
+
+- name: Create docker volume for elastic serach
+  command: docker volume create --name esdata
+
+- name: Start ElasticSearch container
+  command: "docker run --network=elastic -d --name elasticsearch -v esdata:/usr/share/elasticsearch/data -p 9200:9200 -p 9300:9300 --restart always docker.io/elasticsearch:{{ elastic_version }}"
+
+- name: Start Kibana container
+  command: "docker run --network=elastic -d --name kibana -p 5601:5601 --restart always docker.io/kibana:{{ kibana_version }}"
+
+- name: Create scripts directory for NiFi
+  file:
+    path: /tmp/scripts
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Start NiFi container
+  command: "docker run -d --name odp-data-nifi -p 8080:8080 -p 8081:8081 -v /tmp/in:/opt/data/in -v /tmp/out:/opt/data/out -v /tmp/scripts:/opt/data/scripts --restart always boozallen/odp-data-nifi:{{ odp_nifi_version }}"
+
+- name: Set /tmp/out permissions
+  command: chmod -R 777 /tmp/out

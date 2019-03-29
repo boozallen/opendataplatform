@@ -1,0 +1,20 @@
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+- name: Display post-install information for public access
+  debug:
+    msg:
+      - "The Open Data Platform has successfully completed the installation of {{ deployment_type }}!"
+      - "The {{ console_name }} console can now be accessed at http://{{ ec2_management_facts_vars.instances[0].public_ip_address }}:{{ console_port }} using the credentials specified in group_vars/all."
+      - "The Nifi GUI Can be accessed at http://{{ ec2_enk_facts_vars.instances[0].public_ip_address }}:8080/nifi"
+      - "The Kibana GUI Can be accessed at http://{{ ec2_enk_facts_vars.instances[0].public_ip_address }}:5601"
+  when: aws_access_mode == 'public'
+
+- name: Display post-install information for private access
+  debug:
+    msg:
+      - "The Open Data Platform has successfully completed the installation of {{ deployment_type }}!"
+      - "The {{ console_name }} console can now be accessed at http://{{ ec2_management_facts_vars.instances[0].private_ip_address }}:{{ console_port }} using the credentials specified in group_vars/all."
+      - "The Nifi GUI Can be accessed at http://{{ ec2_enk_facts_vars.instances[0].private_ip_address }}:8080/nifi"
+      - "The Kibana GUI Can be accessed at http://{{ ec2_enk_facts_vars.instances[0].private_ip_address }}:5601"
+  when: aws_access_mode == 'private'

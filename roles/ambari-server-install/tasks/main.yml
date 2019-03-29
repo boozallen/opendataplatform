@@ -1,0 +1,22 @@
+# Copyright: (c) 2019, Booz Allen Hamilton
+# Booz Allen Public License v1.0 (see LICENSE or http://boozallen.github.io/licenses/bapl)
+
+- name: Install Ambari server
+  yum:
+    pkg: ambari-server
+    state: installed
+
+- name: Configure Ambari server
+  command: ambari-server setup -s
+
+- stat:
+    path: /var/run/ambari-server/ambari-server.pid
+  register: ambari_server_pid
+
+- name: Start Ambari server
+  command: ambari-server start
+  when: ambari_server_pid.stat.exists == False
+
+- name: Pause to allow Ambari Server to respond to requests
+  pause:
+    seconds: 10

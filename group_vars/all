@@ -1,0 +1,90 @@
+###### AWS settings - to be updated by user
+
+# Unique identifier name, e.g. project name, team name, office number
+# This allows multiple instances of ODP to be deployed in the same AWS subnet
+# It is recommended to use a simple one-word value
+aws_unique_identifier:
+
+# AWS Access Mode. This defines whether Ansible should use the EC2 public or private IP address
+# for SSH access. Set value to either 'public' (default) or 'private'.
+aws_access_mode:
+
+# Set aws_user to 'ec2-user' for RHEL, and 'centos' for Centos
+aws_user:
+
+# AWS AMI for region to deploy ODP in. Example: ami-6d1c2007; We have tested these scripts to work with ami-c998b6b2 & ami-6d1c2007
+aws_image:
+
+# AWS Region. Only include the region number without the letter designation. Example: us-east-1
+aws_region:
+
+# AWS Subnet ID
+# Example: subnet-xxxxxxxx
+aws_subnet_id:
+
+# AWS Security Group for environment. Example: aws-security-group
+aws_security_group:
+
+# AWS Key Pair (private key file should be located at ~/.ssh/id_rsa for Ansible). Example: aws-key-pair
+aws_keypair:
+
+# Device Name. Set this value to 'sda1' for RHEL/Centos images
+aws_device_name: sda1
+
+# The EC2 instance type to use. Example: m4.2xlarge, t2.large
+# For Ambari Managemetn Server
+aws_management_instance_type: m4.2xlarge
+# For Ambari cleints
+aws_client_instance_type: t2.large
+# For Elastic NiFi Kibana Machine
+aws_enk_instance_type: t2.large
+
+# Configure the numeric primary disk size in GB for management and client servers; We recommend at least 50 GB
+aws_management_server_volume_size: 50
+aws_client_server_volume_size: 50
+aws_enk_server_volume_size: 50
+
+# Set the username and password for the admin user of the Management Console (Ambari or Cloudera Manager)
+# Do not use backslashes (\) or single- (') or double-quotes (") in the password to avoid parsing errors.
+management_console_username:
+management_console_password:
+
+# Cloudera only: Set passwords for connections to PostgreSQL database. Do not use backslashes (\) or
+# single- (') or double-quotes (") to avoid parsing errors.
+cloudera_db_password:
+hive_metastore_db_password:
+hue_db_password:
+oozie_db_password:
+# Use version 18 for CDH 5.13
+api_version: 18
+
+###### HortonWorks and Cloudera Properties - Advanced Configuration
+
+# Hortonworks Repos
+ambari_repo_7: http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.5.2.0
+hdp_repo_7: http://public-repo-1.hortonworks.com/HDP/centos7/2.x/updates/2.6.2.14
+hdp_utils_repo_7: http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.21/repos/centos7
+
+# HDP Stack
+hdp_stack_version: 2.6
+
+# Cloudera Manager Repo
+cloudera_manager_repo: https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/5/
+cloudera_manager_repo_gpg: https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KEY-cloudera
+
+# Cloudera Parcel Repo
+cloudera_parcel_repo: http://archive.cloudera.com/cdh5/parcels/5.13.0.29/
+cdh_parcel_version: 5.13.0-1.cdh5.13.0.p0.29
+kafka_parcel_repo: http://archive.cloudera.com/kafka/parcels/3.0.0.40/
+kafka_parcel_version: 3.0.0-1.3.0.0.p0.40
+
+###### Elastic Stack Properties
+
+#Elastic Stack
+elastic_version: 6.6.0
+
+#Kibana Stack
+kibana_version: 6.6.0
+
+###### NiFi Properties
+odp_nifi_version: 0.1.0
