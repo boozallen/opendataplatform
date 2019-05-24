@@ -5,7 +5,7 @@
 
 # Gather all facts from AWS to build out Ansible variables
 - name: Gather EC2 facts for management server
-  ec2_remote_facts:
+  ec2_instance_facts:
     region: "{{ aws_region }}"
     filters:
       instance-state-name: running
@@ -13,7 +13,7 @@
   register: ec2_management_facts
 
 - name: Gather EC2 facts for client servers
-  ec2_remote_facts:
+  ec2_instance_facts:
     region: "{{ aws_region }}"
     filters:
       instance-state-name: running
@@ -21,7 +21,7 @@
   register: ec2_client_facts
 
 - name: Gather EC2 facts for enk server
-  ec2_remote_facts:
+  ec2_instance_facts:
     region: "{{ aws_region }}"
     filters:
       instance-state-name: running
